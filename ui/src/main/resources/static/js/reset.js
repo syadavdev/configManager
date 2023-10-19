@@ -12,11 +12,10 @@ function reset() {
             return response.text();
         })
         .then(content => {
-            // Assuming editors is defined globally or imported from another module
+            // Set the editor content to the fetched content
             editors[editorId].setValue(content);
             console.log('Editor content reset successfully');
 
-            // Assuming showToast is defined globally or imported from another module
             showToast(`"${activePaneName}" configuration content has been rollback to Previously Saved State.`);
 
         })
