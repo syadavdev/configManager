@@ -20,7 +20,7 @@ import java.util.Properties;
 
 @RestController
 @RequestMapping("/api/properties")
-@Tag(name = "Properties to JSON Converter", description = "Converts properties files to JSON")
+@Tag(name = "Properties to JSON Converter", description = "Converts properties apiList to JSON")
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")  // Allow requests from your Angular app
 public class PropertiesController {
@@ -54,9 +54,9 @@ public class PropertiesController {
     }
 
     @PostMapping("/convert-multiple")
-    @Operation(summary = "Converts multiple properties files to JSON", description = "Converts multiple properties files to JSON")
+    @Operation(summary = "Converts multiple properties apiList to JSON", description = "Converts multiple properties apiList to JSON")
     public String convertMultiplePropertiesToJson(
-            @Parameter(description = "The properties files to convert", required = true) @RequestParam("files") MultipartFile[] files)
+            @Parameter(description = "The properties apiList to convert", required = true) @RequestParam("files") MultipartFile[] files)
             throws IOException, EmptyFileException, NullFileNameException {
 
         checkFilesNotNullOrEmpty(files);
@@ -69,15 +69,15 @@ public class PropertiesController {
             propertiesMap.put(file.getOriginalFilename(), properties);
         }
 
-        log.info("Successfully converted {} properties files to JSON", files.length);
+        log.info("Successfully converted {} properties apiList to JSON", files.length);
 
         return propertiesToJsonConverter.convertAllToJson(propertiesMap);
     }
 
     private void checkFilesNotNullOrEmpty(MultipartFile[] files) throws EmptyFileException {
         if (files == null || files.length == 0) {
-            log.error("No files provided for conversion");
-            throw new EmptyFileException("No files provided");
+            log.error("No apiList provided for conversion");
+            throw new EmptyFileException("No apiList provided");
         }
     }
 

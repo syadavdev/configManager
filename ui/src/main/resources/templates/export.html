@@ -1,74 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header.html :: header">
+<head th:replace="~{fragments/header.html :: header}">
 </head>
 <body>
+<div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 
-<h2>Uploaded Files:</h2>
-<!-- Navbar goes here -->
-<div th:replace="fragments/navbar.html :: navbar-content"></div>
+<div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 1000;">
+    <!-- Position it -->
+    <div style="position: fixed; top: 0; right: 0; margin: 15px;">
+        <!-- Then put toasts within -->
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                File saved successfully!
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Tab navs -->
-<ul class="nav nav-pills nav-fill" id="fileTabs" role="tablist">
-    <li class="nav-item" role="presentation" th:each="file, stat : ${uploadedFiles}">
+<ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
+    <li class="nav-item" role="presentation" th:each="api : ${apiList}">
         <a class="nav-link"
-           th:classappend="${stat.first} ? 'active' : ''"
-           th:id="'tab-' + ${file.key}"
+           th:classappend="${apiStat.first} ? 'active' : ''"
+           th:id="'tab-' + ${api.id}"
            data-bs-toggle="tab"
-           th:href="'#' + ${file.key}"
+           th:href="'#' + ${api.id}"
            role="tab"
-           th:attr="aria-controls=${file.key},aria-selected=${stat.first} ? 'true' : 'false'"
-           th:text="${labels[file.key]}"> <!-- Use the labels map here -->
+           th:attr="aria-controls=${api.id},aria-selected=${apiStat.first} ? 'true' : 'false'"
+           th:text="${api.label}">
         </a>
     </li>
 </ul>
 
 <!-- Tab contents -->
-<div class="tab-content" id="fileTabsContent" th:each="file, stat : ${uploadedFiles}">
+<div class="tab-content mt-1 p-1" id="fileTabsContent" th:each="api : ${apiList}">
     <div class="tab-pane fade"
-         th:classappend="${stat.first} ? 'show active' : ''"
-         th:attr="id=${file.key},aria-labelledby='tab-' + ${file.key}"
+         th:classappend="${apiStat.first} ? 'show active' : ''"
+         th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
          role="tabpanel">
-        <div th:data-language="${languages[file.key]}" th:id="'editor-' + ${file.key}" style="height: 400px;" th:attr="data-content=${file.value}"></div>
+        <div class="editor-container rounded mt-3"
+             th:data-language="${api.language}"
+             th:id="'editor-' + ${api.id}"
+             style="height: calc(100vh - 200px); margin: 10px 20px">
+        </div>
     </div>
 </div>
 
-<!-- Monaco Editor initialization script -->
-<script>
-    window.onload = function() {
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+<div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
+    <button type="button" class="btn btn-primary" style="margin-right: 10px;" onclick="save()">Save</button>
+    <button type="button" class="btn btn-secondary" style="margin-right: 10px;" onclick="exportData()">Export</button>
+    <button type="button" class="btn btn-danger" onclick="reset()">Reset</button>
+</div>
 
-        let editors = {};  // Object to hold references to all the Monaco editor instances
-
-        require(['vs/editor/editor.main'], function() {
-            document.querySelectorAll('.tab-pane').forEach(pane => {
-                const editorId = 'editor-' + pane.id;
-                const editorElement = document.getElementById(editorId);
-                const content = editorElement.getAttribute('data-content');
-                const language = pane.getAttribute('data-language');  // Get the language from the data-language attribute
-
-                editors[editorId] = monaco.editor.create(editorElement, {
-                    value: content,
-                    language: language,  // Use the language here
-                    theme: 'vs-dark',
-                    readOnly: true
-                });
-            });
-        });
-
-        // Listen for the Bootstrap tab shown event to refresh the Monaco editors
-        document.getElementById('fileTabs').addEventListener('shown.bs.tab', function(e) {
-            const targetId = e.target.getAttribute('href').substring(1);  // Get the id of the activated tab pane
-            const editorId = 'editor-' + targetId;
-            if (editors[editorId]) {
-                setTimeout(function() {  // Use a timeout to delay the refresh
-                    editors[editorId].layout();  // Refresh the Monaco editor
-                }, 300);  // Delay time in milliseconds (adjust as needed)
-            }
-        });
-    }
-</script>
-
+<!-- External script imports -->
+<script src="/js/main.js"></script>
+<script src="/js/save.js"></script>
+<script src="/js/export.js"></script>
+<script src="/js/reset.js"></script>
 
 </body>
 </html>

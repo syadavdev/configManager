@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header.html :: header">
+</head>
+<body>
+
+<!-- Navbar goes here -->
+<div th:replace="fragments/navbar.html :: navbar-content"></div>
+
+<!-- Space between navbar and form -->
+<div class="mt-5"></div>
+
+<!--&lt;!&ndash; Centered upload form &ndash;&gt;-->
+<!--<div class="container">-->
+<!--    <form th:action="@{/upload}" method="post" enctype="multipart/form-data">-->
+
+<!--        &lt;!&ndash; File input with Bootstrap 5 styling &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            <label for="tenant" class="form-label">Tenant File</label>-->
+<!--            <input type="file" class="form-control" id="tenant" name="tenant" required>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--            <label for="productFamily" class="form-label">Product Family File</label>-->
+<!--            <input type="file" class="form-control" id="productFamily" name="productFamily" required>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--            <label for="product" class="form-label">Product File</label>-->
+<!--            <input type="file" class="form-control" id="product" name="product" required>-->
+<!--        </div>-->
+
+<!--        <div class="mb-3">-->
+<!--            <label for="api" class="form-label">API File</label>-->
+<!--            <input type="file" class="form-control" id="api" name="api" required>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Submit button for the form &ndash;&gt;-->
+<!--        <div class="text-center mt-3">-->
+<!--            <input type="submit" value="Upload" class="btn btn-primary">-->
+<!--        </div>-->
+
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // Updating the label text when a file is selected-->
+<!--    document.querySelectorAll('.form-control[type="file"]').forEach(item => {-->
+<!--        item.addEventListener('change', function() {-->
+<!--            var fileName = this.value.split('\\').pop();-->
+<!--            this.previousElementSibling.innerText = fileName;-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+</html>
