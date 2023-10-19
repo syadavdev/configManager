@@ -4,8 +4,6 @@
 </head>
 <body>
 
-<h2>Uploaded Files:</h2>
-<!-- Navbar goes here -->
 <div th:replace="fragments/navbar.html :: navbar-content"></div>
 
 <!-- Tab navs -->
@@ -29,9 +27,12 @@
          th:classappend="${stat.first} ? 'show active' : ''"
          th:attr="id=${file.key},aria-labelledby='tab-' + ${file.key}"
          role="tabpanel">
-        <div th:data-language="${languages[file.key]}" th:id="'editor-' + ${file.key}" style="height: 400px;" th:attr="data-content=${file.value}"></div>
+        <pre th:data-language="${languages[file.key]}" th:id="'editor-' + ${file.key}" style="height: 400px;">
+            <code th:text="${file.value}"></code>
+        </pre>
     </div>
 </div>
+
 
 <!-- Monaco Editor initialization script -->
 <script>
@@ -50,9 +51,14 @@
                 editors[editorId] = monaco.editor.create(editorElement, {
                     value: content,
                     language: language,  // Use the language here
+                    scrollbar: {
+                        vertical: 'auto',
+                        horizontal: 'auto'
+                    },
                     theme: 'vs-dark',
-                    readOnly: true
-                });
+                    automaticLayout: true,
+
+                    });
             });
         });
 
