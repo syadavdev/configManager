@@ -38,12 +38,12 @@
 </ul>
 
 <!-- Tab contents -->
-<div class="tab-content mt-1 p-1" id="fileTabsContent" th:each="api : ${apiList}">
+<div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
     <div class="tab-pane fade"
          th:classappend="${apiStat.first} ? 'show active' : ''"
          th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
          role="tabpanel">
-        <div class="editor-container rounded mt-3"
+        <div class="editor-container rounded mt-1"
              th:data-language="${api.language}"
              th:id="'editor-' + ${api.id}"
              style="height: calc(100vh - 200px); margin: 10px 20px">
