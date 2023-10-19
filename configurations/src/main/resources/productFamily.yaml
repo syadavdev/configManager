@@ -1,4 +1,5 @@
 productFamily:
+  environment : sandbox99
   id: loan-family
   name: Loan Product Family
   description: A group of related loan products offered by our financial institution.

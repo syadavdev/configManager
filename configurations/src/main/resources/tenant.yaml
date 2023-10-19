@@ -1,4 +1,5 @@
 apiTenant:
+  environment : sandbox9
   id: api-tenant-1
   name: API Tenant 1
   description: An API tenant for managing and accessing APIs.

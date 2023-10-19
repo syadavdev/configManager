@@ -1,4 +1,4 @@
-package com.pnc.mozart.configurations;
+package com.idi.mozart.configurations;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

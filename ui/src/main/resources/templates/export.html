@@ -6,9 +6,29 @@
 
 </head>
 <body>
-<div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
+<div th:replace="~{fragments/navbar.html :: navbar-content}">
+
+</div>
+<div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 1000;">
+    <!-- Position it -->
+    <div style="position: fixed; top: 0; right: 0; margin: 15px;">
+        <!-- Then put toasts within -->
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                File saved successfully!
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Tab navs -->
-<ul class="nav nav-pills nav-fill" id="fileTabs" role="tablist">
+<ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
     <li class="nav-item" role="presentation" th:each="api : ${apiList}">
         <a class="nav-link"
            th:classappend="${apiStat.first} ? 'active' : ''"
@@ -24,39 +44,66 @@
 
 
 <!-- Tab contents -->
-<div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
+<div class="tab-content mt-1 p-1" id="fileTabsContent" th:each="api : ${apiList}">
     <div class="tab-pane fade"
          th:classappend="${apiStat.first} ? 'show active' : ''"
          th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
          role="tabpanel">
-        <div class="editor-container"
-             data-language="${api.language}"
+        <div class="editor-container rounded mt-3"
+             th:data-language="${api.language}"
              th:id="'editor-' + ${api.id}"
-             style="calc(100vh - 200px);margin: 10px 20px">
+             style="height: calc(100vh - 200px); margin: 10px 20px"
+        >
         </div>
     </div>
 </div>
 
+<div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
+    <button type="button" class="btn btn-primary" style="margin-right: 10px;" onclick="save()">Save</button>
+    <button type="button" class="btn btn-secondary" style="margin-right: 10px;" onclick="exportData()">Export</button>
+    <button type="button" class="btn btn-danger" onclick="reset()">Reset</button>
+</div>
+
 <!-- Monaco Editor initialization script -->
 <script>
+    let editors = {};  // Object to hold references to all the Monaco editor instances
+    function showToast(message) {
+        const toastElement = document.getElementById('notificationToast');
+        toastElement.querySelector('.toast-body').textContent = message;
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    }
+
     window.onload = function() {
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
 
-        let editors = {};  // Object to hold references to all the Monaco editor instances
 
         require(['vs/editor/editor.main'], function() {
+            // // Set YAML diagnostics options
+            // monaco.languages.yaml.yamlDefaults.setDiagnosticsOptions({
+            //     validate: true,
+            //     enableSchemaRequest: true,
+            //     hover: true,
+            //     completion: true,
+            // });
+
             document.querySelectorAll('.tab-pane').forEach(pane => {
                 const editorId = 'editor-' + pane.id;
                 const editorElement = document.getElementById(editorId);
-                const language = pane.getAttribute('data-language');  // Get the language from the data-language attribute
+                // Find the child div element with the class editor-container
+                const editorContainer = pane.querySelector('.editor-container');
 
+                // Get the data-language attribute from the editorContainer element
+                let language = editorContainer.getAttribute('data-language');
+
+                console.log('Language: ' + language);
                 // Make GET request to the API endpoint to fetch the content
                 fetch(`http://localhost:18080/api/${pane.id}/getconfiguration`)
                     .then(response => response.text())
                     .then(content => {
                         editors[editorId] = monaco.editor.create(editorElement, {
                             value: content,
-                            language: language,  // Use the language here
+                            language: language.toLowerCase(),  // Use the language here
                             scrollbar: {
                                 vertical: 'auto',
                                 horizontal: 'auto'
@@ -87,6 +134,71 @@
             container.style.height = (window.innerHeight - 200) + 'px';
         });
     }
+
+    function save() {
+        console.log('Save button clicked');
+        const activePaneId = document.querySelector('.tab-pane.show.active').id;
+        const editorId = 'editor-' + activePaneId;
+        const editorContent = editors[editorId].getValue();  // Get the current content of the active editor
+        const activePaneName = document.querySelector(`#tab-${activePaneId}`).textContent;
+
+        const formData = new FormData();
+        const file = new Blob([editorContent], { type: 'text/plain' });
+
+        formData.append('file', file);
+
+        fetch(`http://localhost:18080/api/${activePaneId}/saveconfiguration`, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log('File saved successfully:', data);
+                showToast('File saved successfully');
+                showToast(`"${activePaneName}" Configuration saved successfully.`);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+
+
+    function exportData() {
+        console.log('Export button clicked');
+        // Your export logic here
+    }
+
+    function reset() {
+        console.log('Reset button clicked');
+        const activePaneId = document.querySelector('.tab-pane.show.active').id;
+        const editorId = 'editor-' + activePaneId;
+        const activePaneName = document.querySelector(`#tab-${activePaneId}`).textContent;
+
+        fetch(`http://localhost:18080/api/${activePaneId}/getconfiguration`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(content => {
+                // Set the editor content to the fetched content
+                editors[editorId].setValue(content);
+                console.log('Editor content reset successfully');
+
+                showToast(`"${activePaneName}" configuration content has been rollback to Previously Saved State.`);
+
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    }
+
 </script>
 
 </body>

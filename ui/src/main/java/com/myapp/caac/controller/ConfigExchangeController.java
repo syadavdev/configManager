@@ -41,7 +41,7 @@ public class ConfigExchangeController {
         CustomApi tenantApi = new CustomApi("tenant", "Tenant", "yaml");
         CustomApi productFamilyApi = new CustomApi("productfamily", "Product Family", "yaml");
         CustomApi productApi = new CustomApi("product", "Product", "yaml");
-        CustomApi apiApi = new CustomApi("api", "API", "javascript");
+        CustomApi apiApi = new CustomApi("api", "API", "json");
 
         List<CustomApi> apiList = List.of(tenantApi, productFamilyApi, productApi, apiApi);
 

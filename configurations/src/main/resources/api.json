@@ -1,6 +1,8 @@
 {
-  "apiName": "My API",
-  "version": "1.0",
+  "authentication": {
+    "type": "API Key",
+    "apiKey": "your-api-key-here"
+  },
   "endpoints": [
     {
       "name": "Endpoint 1",
@@ -15,8 +17,6 @@
       "description": "Create data with Endpoint 2"
     }
   ],
-  "authentication": {
-    "type": "API Key",
-    "apiKey": "your-api-key-here"
-  }
+  "name": "My Api",
+  "version": "1.0"
 }

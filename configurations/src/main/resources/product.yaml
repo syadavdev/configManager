@@ -1,5 +1,6 @@
 product:
-  id: loanXXXXXX
+  environment : sandbox
+  id: loan
   name: Loan Product
   description: A financial product for providing loans to customers.
   version: 1.0
