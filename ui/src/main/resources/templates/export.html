@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header.html :: header">
+</head>
+<body>
+
+<h2>Uploaded Files:</h2>
+<!-- Navbar goes here -->
+<div th:replace="fragments/navbar.html :: navbar-content"></div>
+
+<!-- Tab navs -->
+<ul class="nav nav-pills nav-fill" id="fileTabs" role="tablist">
+    <li class="nav-item" role="presentation" th:each="file, stat : ${uploadedFiles}">
+        <a class="nav-link"
+           th:classappend="${stat.first} ? 'active' : ''"
+           th:id="'tab-' + ${file.key}"
+           data-bs-toggle="tab"
+           th:href="'#' + ${file.key}"
+           role="tab"
+           th:attr="aria-controls=${file.key},aria-selected=${stat.first} ? 'true' : 'false'"
+           th:text="${labels[file.key]}"> <!-- Use the labels map here -->
+        </a>
+    </li>
+</ul>
+
+<!-- Tab contents -->
+<div class="tab-content" id="fileTabsContent" th:each="file, stat : ${uploadedFiles}">
+    <div class="tab-pane fade"
+         th:classappend="${stat.first} ? 'show active' : ''"
+         th:attr="id=${file.key},aria-labelledby='tab-' + ${file.key}"
+         role="tabpanel">
+        <div th:data-language="${languages[file.key]}" th:id="'editor-' + ${file.key}" style="height: 400px;" th:attr="data-content=${file.value}"></div>
+    </div>
+</div>
+
+<!-- Monaco Editor initialization script -->
+<script>
+    window.onload = function() {
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+
+        let editors = {};  // Object to hold references to all the Monaco editor instances
+
+        require(['vs/editor/editor.main'], function() {
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                const editorId = 'editor-' + pane.id;
+                const editorElement = document.getElementById(editorId);
+                const content = editorElement.getAttribute('data-content');
+                const language = pane.getAttribute('data-language');  // Get the language from the data-language attribute
+
+                editors[editorId] = monaco.editor.create(editorElement, {
+                    value: content,
+                    language: language,  // Use the language here
+                    theme: 'vs-dark',
+                    readOnly: true
+                });
+            });
+        });
+
+        // Listen for the Bootstrap tab shown event to refresh the Monaco editors
+        document.getElementById('fileTabs').addEventListener('shown.bs.tab', function(e) {
+            const targetId = e.target.getAttribute('href').substring(1);  // Get the id of the activated tab pane
+            const editorId = 'editor-' + targetId;
+            if (editors[editorId]) {
+                setTimeout(function() {  // Use a timeout to delay the refresh
+                    editors[editorId].layout();  // Refresh the Monaco editor
+                }, 300);  // Delay time in milliseconds (adjust as needed)
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>

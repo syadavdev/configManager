@@ -1,0 +1,9 @@
+{
+
+  "classpath:application.properties" : {
+    "a" : "1"
+  },
+  "classpath:my-application.properties" : {
+    "b" : "2"
+  }
+}

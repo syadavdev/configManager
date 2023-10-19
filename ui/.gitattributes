@@ -1,0 +1,36 @@
+#
+# https://help.github.com/articles/dealing-with-line-endings/
+#
+# Linux start script should use lf
+/gradlew        text eol=lf
+
+# These are Windows script files and should use crlf
+*.bat           text eol=crlf
+
+# Set the default behavior for files without a specific attribute
+* text=auto
+
+# Specify attributes for JAR files
+*.jar binary
+
+
+# Exclude files and directories
+node_modules/       binary
+build/              binary
+**/build/           binary
+.gradle/            binary
+.idea/              binary
+.vscode/            binary
+*.iml               binary
+*.log               text eol=lf
+
+# Specify files with specific attributes
+# Set Angular-related files to treat as text (UTF-8)
+src/main/webapp/ angular text
+src/main/webapp/*.html angular text
+src/main/webapp/*.css angular text
+src/main/webapp/*.js angular text
+
+# Set Java files to treat as text (UTF-8)
+src/main/java/      text
+
