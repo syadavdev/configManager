@@ -37,6 +37,7 @@ public class ConfigurationController {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
 	            buf.append(line);
+				buf.append(System.lineSeparator());
 	        }
 	    } catch (Exception e) {
 	        throw e;
@@ -56,7 +57,8 @@ public class ConfigurationController {
 	         BufferedReader reader = new BufferedReader(streamReader)) {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
-	            buf.append(line);
+	            buf.append(line);				buf.append(System.lineSeparator());
+
 	        }
 	    } catch (Exception e) {
 	        throw e;
@@ -76,7 +78,8 @@ public class ConfigurationController {
 	         BufferedReader reader = new BufferedReader(streamReader)) {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
-	            buf.append(line);
+	            buf.append(line);				buf.append(System.lineSeparator());
+
 	        }
 	    } catch (Exception e) {
 	        throw e;
@@ -96,7 +99,8 @@ public class ConfigurationController {
 	         BufferedReader reader = new BufferedReader(streamReader)) {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
-	            buf.append(line);
+	            buf.append(line);				buf.append(System.lineSeparator());
+
 	        }
 	    } catch (Exception e) {
 	        throw e;

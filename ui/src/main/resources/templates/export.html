@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header.html :: header">
+<head th:replace="~{fragments/header.html :: header}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js" integrity="sha512-8RnEqURPUc5aqFEN04aQEiPlSAdE0jlFS/9iGgUyNtwFnSKCXhmB6ZTNl7LnDtDWKabJIASzXrzD0K+LYexU9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
-
-<div th:replace="fragments/navbar.html :: navbar-content"></div>
-
+<div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 <!-- Tab navs -->
 <ul class="nav nav-pills nav-fill" id="fileTabs" role="tablist">
-    <li class="nav-item" role="presentation" th:each="file, stat : ${uploadedFiles}">
+    <li class="nav-item" role="presentation" th:each="api : ${apiList}">
         <a class="nav-link"
-           th:classappend="${stat.first} ? 'active' : ''"
-           th:id="'tab-' + ${file.key}"
+           th:classappend="${apiStat.first} ? 'active' : ''"
+           th:id="'tab-' + ${api.id}"
            data-bs-toggle="tab"
-           th:href="'#' + ${file.key}"
+           th:href="'#' + ${api.id}"
            role="tab"
-           th:attr="aria-controls=${file.key},aria-selected=${stat.first} ? 'true' : 'false'"
-           th:text="${labels[file.key]}"> <!-- Use the labels map here -->
+           th:attr="aria-controls=${api.id},aria-selected=${apiStat.first} ? 'true' : 'false'"
+           th:text="${api.label}">
         </a>
     </li>
 </ul>
 
+
 <!-- Tab contents -->
-<div class="tab-content" id="fileTabsContent" th:each="file, stat : ${uploadedFiles}">
+<div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
     <div class="tab-pane fade"
-         th:classappend="${stat.first} ? 'show active' : ''"
-         th:attr="id=${file.key},aria-labelledby='tab-' + ${file.key}"
+         th:classappend="${apiStat.first} ? 'show active' : ''"
+         th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
          role="tabpanel">
-        <pre th:data-language="${languages[file.key]}" th:id="'editor-' + ${file.key}" style="height: 400px;">
-            <code th:text="${file.value}"></code>
-        </pre>
+        <div class="editor-container"
+             data-language="${api.language}"
+             th:id="'editor-' + ${api.id}"
+             style="calc(100vh - 200px);margin: 10px 20px">
+        </div>
     </div>
 </div>
-
 
 <!-- Monaco Editor initialization script -->
 <script>
@@ -45,19 +48,25 @@
             document.querySelectorAll('.tab-pane').forEach(pane => {
                 const editorId = 'editor-' + pane.id;
                 const editorElement = document.getElementById(editorId);
-                const content = editorElement.getAttribute('data-content');
                 const language = pane.getAttribute('data-language');  // Get the language from the data-language attribute
 
-                editors[editorId] = monaco.editor.create(editorElement, {
-                    value: content,
-                    language: language,  // Use the language here
-                    scrollbar: {
-                        vertical: 'auto',
-                        horizontal: 'auto'
-                    },
-                    theme: 'vs-dark',
-                    automaticLayout: true,
-
+                // Make GET request to the API endpoint to fetch the content
+                fetch(`http://localhost:18080/api/${pane.id}/getconfiguration`)
+                    .then(response => response.text())
+                    .then(content => {
+                        editors[editorId] = monaco.editor.create(editorElement, {
+                            value: content,
+                            language: language,  // Use the language here
+                            scrollbar: {
+                                vertical: 'auto',
+                                horizontal: 'auto'
+                            },
+                            theme: 'vs-dark',
+                            automaticLayout: true,
+                        });
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching content for ${editorId}: ${error}`);
                     });
             });
         });
@@ -72,9 +81,13 @@
                 }, 300);  // Delay time in milliseconds (adjust as needed)
             }
         });
+
+        const editorContainers = document.querySelectorAll('.editor-container');
+        editorContainers.forEach(container => {
+            container.style.height = (window.innerHeight - 200) + 'px';
+        });
     }
 </script>
-
 
 </body>
 </html>
