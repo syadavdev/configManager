@@ -1,21 +1,23 @@
 package com.myapp.caac.controller;
 
+import com.myapp.caac.entity.CustomApi;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import com.myapp.caac.entity.CustomApi;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
 public class ConfigExchangeController {
 
+
+    // Create a list of map entries
+    private final String tenant = "tenant";
+    private final String productFamily = "productFamily";
+    private final String product = "product";
+    private final String api = "api";
 
     @GetMapping("/")
     public String home() {
@@ -27,11 +29,6 @@ public class ConfigExchangeController {
         model.addAttribute("currentPage", "load");
         return "save";
     }
-    // Create a list of map entries
-    private final String tenant = "tenant";
-    private final  String productFamily = "productFamily";
-    private final  String product = "product";
-    private final  String api = "api";
 
     @GetMapping("/export")
     public String export(Model model) {

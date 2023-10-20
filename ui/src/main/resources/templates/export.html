@@ -5,15 +5,15 @@
 <body>
 <div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 
-<div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 1000;">
+<div aria-atomic="true" aria-live="polite" style="position: relative; z-index: 1000;">
     <!-- Position it -->
     <div style="position: fixed; top: 0; right: 0; margin: 15px;">
         <!-- Then put toasts within -->
-        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div aria-atomic="true" aria-live="assertive" class="toast" id="notificationToast" role="alert">
             <div class="toast-header">
                 <strong class="me-auto">Notification</strong>
                 <small>Just now</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button"></button>
             </div>
             <div class="toast-body">
                 File saved successfully!
@@ -26,12 +26,12 @@
 <ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
     <li class="nav-item" role="presentation" th:each="api : ${apiList}">
         <a class="nav-link"
-           th:classappend="${apiStat.first} ? 'active' : ''"
-           th:id="'tab-' + ${api.id}"
            data-bs-toggle="tab"
-           th:href="'#' + ${api.id}"
            role="tab"
            th:attr="aria-controls=${api.id},aria-selected=${apiStat.first} ? 'true' : 'false'"
+           th:classappend="${apiStat.first} ? 'active' : ''"
+           th:href="'#' + ${api.id}"
+           th:id="'tab-' + ${api.id}"
            th:text="${api.label}">
         </a>
     </li>
@@ -40,21 +40,22 @@
 <!-- Tab contents -->
 <div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
     <div class="tab-pane fade"
-         th:classappend="${apiStat.first} ? 'show active' : ''"
+         role="tabpanel"
          th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
-         role="tabpanel">
+         th:classappend="${apiStat.first} ? 'show active' : ''">
         <div class="editor-container rounded mt-1"
+             style="height: calc(100vh - 200px); margin: 10px 20px"
              th:data-language="${api.language}"
-             th:id="'editor-' + ${api.id}"
-             style="height: calc(100vh - 200px); margin: 10px 20px">
+             th:id="'editor-' + ${api.id}">
         </div>
     </div>
 </div>
 
-<div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
-    <button type="button" class="btn btn-primary" style="margin-right: 10px;" onclick="save()">Save</button>
-    <button type="button" class="btn btn-secondary" style="margin-right: 10px;" onclick="exportData()">Export</button>
-    <button type="button" class="btn btn-danger" onclick="reset()">Reset</button>
+<div class="button-container"
+     style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
+    <button class="btn btn-primary" onclick="save(getActiveEditorId())" style="margin-right: 10px;" type="button" disabled>Save</button>
+    <button class="btn btn-secondary" onclick="exportData()" style="margin-right: 10px;" type="button">Export</button>
+    <button class="btn btn-danger" onclick="reset()" type="button">Reset</button>
 </div>
 
 <!-- External script imports -->
