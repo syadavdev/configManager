@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,23 +14,22 @@ import java.util.List;
 @Slf4j
 public class ExportService {
 
-    public RootMetadata setRootMetadata(MultipartFile[] files){
+    public RootMetadata setRootMetadata(String[] fileNames){
         RootMetadata rootMetadata = new RootMetadata();
-        rootMetadata.setNoOfApplications(files.length);
         List<Application> applications = new ArrayList<>();
 
-
-        log.info("Files: {}", files.length);
+        log.info("Files: {}", fileNames.length);
+        rootMetadata.setNoOfApplications(fileNames.length);
         int count =0;
-        //files
-        for (MultipartFile file : files) {
+
+        for (String file : fileNames) {
             count++;
-            log.info("File: {}", file.getOriginalFilename());
+            log.info("File: {}", file);
             Application application =new Application();
-            application.setApplicaitonName(file.getOriginalFilename());
+            application.setApplicaitonName(file);
             application.setExecutionSq(count);
-            String baseName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().lastIndexOf('.'));
-            String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
+            String baseName = file.substring(0 , file.lastIndexOf('.'));
+            String extension = file.substring(file.lastIndexOf('.'));
             application.setApplicaitonMetadataName(baseName + "-metadata" + extension);
             applications.add(application);
         }

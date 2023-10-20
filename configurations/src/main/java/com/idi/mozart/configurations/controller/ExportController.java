@@ -16,38 +16,42 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 @CrossOrigin
 @RestController
 @Slf4j
 public class ExportController {
 
 
-    private ZipFileCreator zipFileCreator;
+
 
     @Autowired
     private ExportService exportService;
 
     @GetMapping("/convert-to-bundle")
-    public ResponseEntity<FileSystemResource> convertPropertiesToJson(@RequestParam("files") MultipartFile[] files ) throws IOException{
+    public ResponseEntity<FileSystemResource> convertPropertiesToJson() throws IOException{
 
-        if (files == null || files.length == 0) {
-            throw new IOException("No files provided");
-        }
+        String[] filesToZip = {"api.json", "product.yaml", "productFamily.yaml" , "tenant.yaml"}; // List of file names to zip
 
-        RootMetadata rootMetadata = exportService.setRootMetadata(files);
+        String zipFileName = "bundle.zip"; // Name of the output ZIP file
+
+        RootMetadata rootMetadata = exportService.setRootMetadata(filesToZip);
 
         // Create an ObjectMapper instance from Jackson
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Serialize the POJO to a JSON file
         objectMapper.writeValue(new File("rootMetadata.json"), rootMetadata);
-        String zipFileName = "bundle.zip";
-        zipFileCreator.createZipFile(files , zipFileName);
+        ZipFileCreator.createZipFile(filesToZip, zipFileName);
 
         File zipFile = new File(zipFileName);
         if (!zipFile.exists()) {

@@ -110,7 +110,7 @@ public class ConfigurationController {
 		return "redirect:/";
 	}
 
-	@PostMapping(value = "api/export")
+	@PostMapping(value = "api/import")
 	public ResponseEntity importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
 		if (zipFile.isEmpty()) {
 			logger.info("zip file is empty");
