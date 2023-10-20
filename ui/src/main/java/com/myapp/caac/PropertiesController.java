@@ -25,7 +25,7 @@ import java.util.Properties;
 @CrossOrigin(origins = "http://localhost:4200")  // Allow requests from your Angular app
 public class PropertiesController {
 
-    private final PropertiesFetcherFactory  propertiesFetcherFactory;
+    private final PropertiesFetcherFactory propertiesFetcherFactory;
     private final PropertiesToJsonConverter propertiesToJsonConverter;
 
     @Autowired

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: head">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Configuration Management Tool</title>
 </head>
 <body>
@@ -14,50 +14,64 @@
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Configuration Management Tool</h1>
         <p class="col-md-8 fs-4">Overview
-            Our Configuration Management Tool (CMT) is designed to streamline the setup and management of software applications across various environments. It ensures consistency and correctness of configuration, which is critical for the accurate and efficient operation of software systems.</p>
+            Our Configuration Management Tool (CMT) is designed to streamline the setup and management of software
+            applications across various environments. It ensures consistency and correctness of configuration, which is
+            critical for the accurate and efficient operation of software systems.</p>
         <a href="/import">
             <h2>Import</h2>
         </a>
-        <p>With the Import , users can easily introduce new configuration settings or update existing ones from external sources:</p>
+        <p>With the Import , users can easily introduce new configuration settings or update existing ones from external
+            sources:</p>
         <ul>
             <li>
-                <strong>Bulk Import:</strong> Streamline the setup process by importing configuration settings in bulk from a file. Supported file formats include JSON, XML, and CSV.
+                <strong>Bulk Import:</strong> Streamline the setup process by importing configuration settings in bulk
+                from a file. Supported file formats include JSON, XML, and CSV.
             </li>
             <li>
-                <strong>Validation:</strong> Before applying new settings, our tool performs validation checks to ensure that the imported configurations are correct and consistent with the system requirements.
+                <strong>Validation:</strong> Before applying new settings, our tool performs validation checks to ensure
+                that the imported configurations are correct and consistent with the system requirements.
             </li>
             <li>
-                <strong>Conflict Resolution:</strong> In case of conflicting settings, the tool provides a user-friendly interface for resolving conflicts and ensuring system stability.
+                <strong>Conflict Resolution:</strong> In case of conflicting settings, the tool provides a user-friendly
+                interface for resolving conflicts and ensuring system stability.
             </li>
         </ul>
 
         <a href="/export">
             <h2>Export</h2>
         </a>
-        <p>The Export  enables users to extract current configuration settings for backup or for use in other environments:</p>
+        <p>The Export enables users to extract current configuration settings for backup or for use in other
+            environments:</p>
         <ul>
             <li>
-                <strong>Selective Export:</strong> Choose specific configurations to export based on categories or individual settings.
+                <strong>Selective Export:</strong> Choose specific configurations to export based on categories or
+                individual settings.
             </li>
             <li>
-                <strong>Format Selection:</strong> Export configurations in a variety of formats including JSON, XML, and CSV for easy use in different contexts.
+                <strong>Format Selection:</strong> Export configurations in a variety of formats including JSON, XML,
+                and CSV for easy use in different contexts.
             </li>
             <li>
-                <strong>Versioning:</strong> Keep track of configuration changes over time with automatic versioning of exported configuration files.
+                <strong>Versioning:</strong> Keep track of configuration changes over time with automatic versioning of
+                exported configuration files.
             </li>
         </ul>
 
         <h2>Additional Features</h2>
         <ul>
             <li>
-                <strong>Audit Trail:</strong> Maintain a complete history of configuration changes to ensure traceability and compliance.
+                <strong>Audit Trail:</strong> Maintain a complete history of configuration changes to ensure
+                traceability and compliance.
             </li>
             <li>
-                <strong>Role-based Access Control:</strong> Define user roles and permissions to ensure that only authorized individuals can make configuration changes.
+                <strong>Role-based Access Control:</strong> Define user roles and permissions to ensure that only
+                authorized individuals can make configuration changes.
             </li>
         </ul>
 
-        <p>Through the robust Import and Export functionalities, our Configuration Management Tool simplifies the process of managing configurations, reducing the risk of errors, and ensuring a seamless operation across different software environments.</p>
+        <p>Through the robust Import and Export functionalities, our Configuration Management Tool simplifies the
+            process of managing configurations, reducing the risk of errors, and ensuring a seamless operation across
+            different software environments.</p>
 
     </div>
 </div>
