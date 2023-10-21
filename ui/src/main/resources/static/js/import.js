@@ -15,7 +15,7 @@ function handleFileUpload() {
         })
             .then(response => response.json())
             .then(data => {
-                showToast(data);
+                showToast(data.status);
             })
             .catch(error => {
                 showToast('Error: ' + error.message);

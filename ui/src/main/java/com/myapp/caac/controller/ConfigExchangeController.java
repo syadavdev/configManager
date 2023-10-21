@@ -24,12 +24,6 @@ public class ConfigExchangeController {
         return "home";
     }
 
-    @GetMapping("/load")
-    public String load(Model model) {
-        model.addAttribute("currentPage", "load");
-        return "save";
-    }
-
     @GetMapping("/export")
     public String export(Model model) {
 
@@ -48,7 +42,12 @@ public class ConfigExchangeController {
     }
 
     @GetMapping("/import")
-    public String importPage() {
+    public String importPage(Model model) {
+
+        model.addAttribute("currentPage", "import");
+
         return "import";
     }
+
+
 }

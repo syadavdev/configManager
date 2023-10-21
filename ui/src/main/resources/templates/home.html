@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head">
+<head th:replace="~{fragments/header.html :: header}">
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Configuration Management Tool</title>
 </head>
 <body>
 <!-- Navbar goes here -->
-<div th:replace="fragments/navbar.html :: navbar-content"></div>
+<div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 
 
 <div class="p-5 mb-4 bg-body-tertiary rounded-3">

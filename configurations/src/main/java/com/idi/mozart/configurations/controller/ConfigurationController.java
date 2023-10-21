@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -111,10 +113,10 @@ public class ConfigurationController {
 	}
 
 	@PostMapping(value = "api/import")
-	public ResponseEntity importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
+	public ResponseEntity<Map<String, String>>  importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
 		if (zipFile.isEmpty()) {
 			logger.info("zip file is empty");
-			return ResponseEntity.badRequest().body("empty zip file");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("status", "empty zip file"));
 		}
 
 		Path resourceDirectory = Paths.get("src", "main", "resources");
@@ -154,13 +156,13 @@ public class ConfigurationController {
 
 		Random random = new Random();
 		int randomNumber = random.nextInt((max - min) + 1) + min;
-
-		if(randomNumber > 5)
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request");
-		else
-			return ResponseEntity.status(HttpStatus.OK).body("Successfully exported");
-
-
-
+		System.out.println("randomNumber:" + randomNumber);
+		if (randomNumber > 5) {
+			System.out.println("Error");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("status", "Bad Request"));
+		} else {
+			System.out.println("Success");
+			return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("status", "Successfully exported"));
+		}
 	}
 }
