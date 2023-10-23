@@ -46,10 +46,10 @@ public class ExportController {
 //        String[] filesToZip = {"api.json", "product.yaml", "productFamily.yaml" , "tenant.yaml"}; // List of file names to zip
 
         Map<String, String> filesToZip  = new HashMap<String, String>() {{
-            put("api.json", "api-metadata.json");
-            put("product.yaml", "product-metadata.json");
-            put("productFamily.yaml" , "productFamily-metadata.json");
-            put("tenant.yaml" , "tenant-metadata.json");
+            put("api.json", "api_metadata.json");
+            put("product.yaml", "product_metadata.json");
+            put("productFamily.yaml" , "productFamily_metadata.json");
+            put("tenant.yaml" , "tenant_metadata.json");
         }};
 
         String zipFileName = "bundle.zip"; // Name of the output ZIP file
@@ -66,7 +66,7 @@ public class ExportController {
         }
 
         // Serialize the POJO to a JSON file
-        objectMapper.writeValue(new File("rootMetadata.json"), rootMetadata);
+        objectMapper.writeValue(new File("root_metadata.json"), rootMetadata);
         ZipFileCreator.createZipFile(filesToZip, zipFileName);
 
         File zipFile = new File(zipFileName);

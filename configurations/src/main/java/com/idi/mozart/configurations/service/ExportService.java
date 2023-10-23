@@ -41,11 +41,11 @@ public class ExportService {
 
         ApplicationMetaData metadata = new ApplicationMetaData();
 //        metadata.setConfigurationFileName(file.getValue());
-        metadata.setConfigurationFilepath("test path");
+        metadata.setConfigurationFilepath("src/main/resources/");
         metadata.setDescription("test desc");
         metadata.setConfigurationType("json");
-        metadata.setConfigurationApplyPath("test");
-        metadata.setConfigurationOperation("ops");
+        metadata.setConfigurationApplyPath("src/main/resources/output/");
+        metadata.setConfigurationOperation("FileUpload");
         return metadata;
     }
 

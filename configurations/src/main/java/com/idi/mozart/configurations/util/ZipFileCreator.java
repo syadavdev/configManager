@@ -55,7 +55,7 @@ public class ZipFileCreator {
                 zos.closeEntry();
             }
 
-            File newFile = new File("rootMetadata.json");
+            File newFile = new File("root_metadata.json");
             ZipEntry newEntry = new ZipEntry(newFile.getName());
             zos.putNextEntry(newEntry);
             FileInputStream newFileInputStream = new FileInputStream(newFile);
