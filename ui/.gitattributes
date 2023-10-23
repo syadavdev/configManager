@@ -36,3 +36,12 @@
 # Common build-tool wrapper scripts ('.cmd' versions are handled by 'Common.gitattributes')
 mvnw            text eol=lf
 gradlew         text eol=lf
+
+
+*.zip           binary
+*.rar           binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
