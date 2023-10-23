@@ -2,6 +2,7 @@ package com.idi.mozart.configurations.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idi.mozart.configurations.model.Application;
+import com.idi.mozart.configurations.model.ApplicationMetaData;
 import com.idi.mozart.configurations.model.RootMetadata;
 import com.idi.mozart.configurations.service.ExportService;
 import com.idi.mozart.configurations.util.ZipFileCreator;
@@ -22,7 +23,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -40,7 +43,14 @@ public class ExportController {
     @GetMapping("/convert-to-bundle")
     public ResponseEntity<FileSystemResource> convertPropertiesToJson() throws IOException{
 
-        String[] filesToZip = {"api.json", "product.yaml", "productFamily.yaml" , "tenant.yaml"}; // List of file names to zip
+//        String[] filesToZip = {"api.json", "product.yaml", "productFamily.yaml" , "tenant.yaml"}; // List of file names to zip
+
+        Map<String, String> filesToZip  = new HashMap<String, String>() {{
+            put("api.json", "api-metadata.json");
+            put("product.yaml", "product-metadata.json");
+            put("productFamily.yaml" , "productFamily-metadata.json");
+            put("tenant.yaml" , "tenant-metadata.json");
+        }};
 
         String zipFileName = "bundle.zip"; // Name of the output ZIP file
 
@@ -48,6 +58,12 @@ public class ExportController {
 
         // Create an ObjectMapper instance from Jackson
         ObjectMapper objectMapper = new ObjectMapper();
+
+        for (Map.Entry<String,String> file : filesToZip.entrySet()){
+            ApplicationMetaData metadata = exportService.setRootMetadata();
+            metadata.setConfigurationFileName(file.getValue());
+            objectMapper.writeValue(new File(file.getValue()) , metadata);
+        }
 
         // Serialize the POJO to a JSON file
         objectMapper.writeValue(new File("rootMetadata.json"), rootMetadata);
