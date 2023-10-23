@@ -19,18 +19,18 @@ public class ExportService {
         List<Application> applications = new ArrayList<>();
 
         log.info("Files: {}", fileNames.length);
-        rootMetadata.setNoOfApplications(fileNames.length);
+        rootMetadata.setNoofapplications(String.valueOf(fileNames.length));
         int count =0;
 
         for (String file : fileNames) {
             count++;
             log.info("File: {}", file);
             Application application =new Application();
-            application.setApplicaitonName(file);
-            application.setExecutionSq(count);
+            application.setApplicationName(file);
+            application.setExecutionSeq(count);
             String baseName = file.substring(0 , file.lastIndexOf('.'));
             String extension = file.substring(file.lastIndexOf('.'));
-            application.setApplicaitonMetadataName(baseName + "-metadata" + extension);
+            application.setApplicationMetadataName(baseName + "-metadata" + extension);
             applications.add(application);
         }
         rootMetadata.setApplications(applications);

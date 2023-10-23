@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class Application {
 
-    String applicaitonName;
-    String applicaitonMetadataName;
-    String applicaitonMetadataPath;
-    int executionSq;
+    private String applicationName;
+    private String applicationMetadataName;
+    private String applicationMetadataPath;
+    private Integer executionSeq;
 }
