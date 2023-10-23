@@ -5,22 +5,10 @@
 <body>
 <div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 
-<div aria-atomic="true" aria-live="polite" style="position: relative; z-index: 1000;">
-    <!-- Position it -->
-    <div style="position: fixed; top: 0; right: 0; margin: 15px;">
-        <!-- Then put toasts within -->
-        <div aria-atomic="true" aria-live="assertive" class="toast" id="notificationToast" role="alert">
-            <div class="toast-header">
-                <strong class="me-auto">Notification</strong>
-                <small>Just now</small>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button"></button>
-            </div>
-            <div class="toast-body">
-                File saved successfully!
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Replace the hardcoded toast with the toast fragment -->
+<div th:replace="~{fragments/toast :: toast}"></div>
+
+<div class="configurations">
 
 <!-- Tab navs -->
 <ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
@@ -50,7 +38,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <div class="button-container"
      style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
     <button class="btn btn-primary" onclick="save(getActiveEditorId())" style="margin-right: 10px;" type="button" disabled>Save</button>
@@ -63,6 +51,7 @@
 <script src="/js/save.js"></script>
 <script src="/js/export.js"></script>
 <script src="/js/reset.js"></script>
+<script src="/js/toast.js"></script>
 
 </body>
 </html>
