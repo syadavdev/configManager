@@ -1,0 +1,6 @@
+/configurations/bundle.zip
+.gradle/
+.idea/
+build/
+**/.gradle
+**/.idea
