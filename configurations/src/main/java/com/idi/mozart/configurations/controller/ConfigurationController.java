@@ -1,6 +1,8 @@
 package com.idi.mozart.configurations.controller;
 
 
+import com.idi.mozart.configurations.service.ImportService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,8 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 public class ConfigurationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationController.class);
+
+	@Autowired
+	private ImportService importService;
 
 	private String readResourceFile(String resourceName) throws IOException {
 		Path resourceDirectory = Paths.get("src", "main", "resources");
@@ -113,56 +116,12 @@ public class ConfigurationController {
 	}
 
 	@PostMapping(value = "api/import")
-	public ResponseEntity<Map<String, String>>  importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
+	public ResponseEntity<String> importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
 		if (zipFile.isEmpty()) {
 			logger.info("zip file is empty");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("status", "empty zip file"));
+			return ResponseEntity.badRequest().body("empty zip file");
 		}
 
-		Path resourceDirectory = Paths.get("src", "main", "resources");
-		Path filePath = resourceDirectory.resolve("config/");
-		logger.info("Extracting file to: {}", filePath.toAbsolutePath());
-		File targetDir = new File(filePath.toAbsolutePath().toString());
-		if (!targetDir.exists()) {
-			targetDir.mkdirs();
-		}
-
-		// Create a ZipInputStream to read the contents of the uploaded zip file
-		try (ZipInputStream zipInputStream = new ZipInputStream(zipFile.getInputStream())) {
-			ZipEntry entry;
-			while ((entry = zipInputStream.getNextEntry()) != null) {
-				String entryName = entry.getName();
-				File entryFile = new File(targetDir.getAbsolutePath(), entryName);
-
-				// Ensure the parent directory of the entry file exists
-				if (!entryFile.getParentFile().exists()) {
-					entryFile.getParentFile().mkdirs();
-				}
-
-				// Write the entry data to the entry file
-				try (OutputStream outputStream = new FileOutputStream(entryFile)) {
-					byte[] buffer = new byte[1024];
-					int len;
-					while ((len = zipInputStream.read(buffer)) > 0) {
-						outputStream.write(buffer, 0, len);
-					}
-				}
-			}
-		}
-
-		//generate random response;
-		int min = 1;  // Minimum value of the range (inclusive)
-		int max = 10;  // Maximum value of the range (inclusive)
-
-		Random random = new Random();
-		int randomNumber = random.nextInt((max - min) + 1) + min;
-		System.out.println("randomNumber:" + randomNumber);
-		if (randomNumber > 5) {
-			System.out.println("Error");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("status", "Bad Request"));
-		} else {
-			System.out.println("Success");
-			return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("status", "Successfully exported"));
-		}
+		return ResponseEntity.status(HttpStatus.OK).body(importService.importConfigs(zipFile));
 	}
 }

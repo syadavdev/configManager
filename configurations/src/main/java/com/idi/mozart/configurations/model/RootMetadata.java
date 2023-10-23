@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class RootMetadata {
 
-    int noOfApplications;
+    private String noofapplications;
 
-    List<Application> applications;
+    private List<Application> applications;
 
 }
