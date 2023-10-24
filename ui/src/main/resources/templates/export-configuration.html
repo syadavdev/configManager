@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header.html :: header}">
+    <title>Export Configuration</title>
+</head>
+<body>
+<div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
+<div th:replace="~{fragments/toast :: toast}"></div>
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center justify-content-between">
+        <h1>Export Configuration</h1>
+        <button class="btn btn-success" id="add-config-button" type="button">Add New Configuration</button>
+    </div>
+
+
+    <table class="table table-bordered" id="config-table">
+        <thead>
+        <tr>
+            <th>Configuration Name</th>
+            <th>API</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="config-row" th:each="exportConfig : ${exportConfigurationsList}"
+            th:id="${'row-' + exportConfig.name}">
+            <td>
+                <!-- Hidden input to send the configuration name -->
+                <input th:id="${'hidden-' + exportConfig.name}"
+                       th:name="name"
+                       th:value="${exportConfig.name}"
+                       type="hidden"/>
+                <span th:text="${exportConfig.name}"></span> <!-- Display the name -->
+            </td>
+            <td>
+                <div th:each="api : ${apiList}">
+                    <div class="form-check">
+                        <input
+                                class="form-check-input api-checkbox"
+                                th:checked="${exportConfig.hasApi(api.id)   }"
+                                th:id="${exportConfig.name + '-' + api.id}"
+                                th:value="${api.id}"
+                                type="checkbox">
+
+                        <label
+                                class="form-check-label"
+                                th:for="${exportConfig.name + '-' + api.id}"
+                                th:text="${api.getLabel()}">
+                        </label>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <button class="btn btn-primary save-button" disabled onclick="handleSaveButtonClick(this.getAttribute('data-config-name'))"
+                        th:data-config-name="${exportConfig.name}" type="button">Save
+                </button>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<script src="/js/exportConfigurations.js"></script>
+<script src="/js/toast.js"></script>
+
+</body>
+</html>

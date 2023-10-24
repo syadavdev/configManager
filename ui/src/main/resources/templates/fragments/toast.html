@@ -1,8 +1,19 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="toast" aria-atomic="true" aria-live="polite" style="position: relative; z-index: 1000;">
+<div aria-atomic="true" aria-live="polite" style="position: relative; z-index: 1000;" th:fragment="toast">
     <div style="position: fixed; top: 0; right: 0; margin: 15px;">
         <div aria-atomic="true" aria-live="assertive" class="toast" id="notificationToast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <small>Just now</small>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="toast" type="button"></button>
+            </div>
+            <div class="toast-body">
+                <!-- Toast message will be set here via JavaScript -->
+            </div>
+        </div>
+        <div aria-atomic="true" aria-live="assertive" class="toast" id="notificationToast2" role="alert">
             <div class="toast-header">
                 <strong class="me-auto">Notification</strong>
                 <small>Just now</small>

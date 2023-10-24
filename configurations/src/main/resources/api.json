@@ -1,7 +1,7 @@
 {
   "authentication": {
     "type": "API Key",
-    "apiKey": "your-api-key-here"
+    "apiKey": "your-api-key"
   },
   "endpoints": [
     {

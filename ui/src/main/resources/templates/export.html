@@ -10,41 +10,72 @@
 
 <div class="configurations">
 
-<!-- Tab navs -->
-<ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
-    <li class="nav-item" role="presentation" th:each="api : ${apiList}">
-        <a class="nav-link"
-           data-bs-toggle="tab"
-           role="tab"
-           th:attr="aria-controls=${api.id},aria-selected=${apiStat.first} ? 'true' : 'false'"
-           th:classappend="${apiStat.first} ? 'active' : ''"
-           th:href="'#' + ${api.id}"
-           th:id="'tab-' + ${api.id}"
-           th:text="${api.label}">
-        </a>
-    </li>
-</ul>
+    <!-- Tab navs -->
+    <ul class="nav nav-pills nav-fill mt-1" id="fileTabs" role="tablist">
+        <li class="nav-item" role="presentation" th:each="api : ${apiList}">
+            <a class="nav-link"
+               data-bs-toggle="tab"
+               role="tab"
+               th:attr="aria-controls=${api.id},aria-selected=${apiStat.first} ? 'true' : 'false'"
+               th:classappend="${apiStat.first} ? 'active' : ''"
+               th:href="'#' + ${api.id}"
+               th:id="'tab-' + ${api.id}"
+               th:text="${api.label}">
+            </a>
+        </li>
+    </ul>
 
-<!-- Tab contents -->
-<div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
-    <div class="tab-pane fade"
-         role="tabpanel"
-         th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
-         th:classappend="${apiStat.first} ? 'show active' : ''">
-        <div class="editor-container rounded mt-1"
-             style="height: calc(100vh - 200px); margin: 10px 20px"
-             th:data-language="${api.language}"
-             th:id="'editor-' + ${api.id}">
+    <!-- Tab contents -->
+    <div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
+        <div class="tab-pane fade"
+             role="tabpanel"
+             th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
+             th:classappend="${apiStat.first} ? 'show active' : ''">
+            <div class="editor-container rounded mt-1"
+                 style="height: calc(100vh - 200px); margin: 10px 20px"
+                 th:data-language="${api.language}"
+                 th:id="'editor-' + ${api.id}">
+            </div>
         </div>
     </div>
 </div>
+<div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;"
+>
+    <button class="btn btn-primary" disabled onclick="save(getActiveEditorId())" style="margin-right: 10px;"
+            type="button">Save
+    </button>
+    <button class="btn btn-danger" onclick="reset()" type="button" style="margin-right: 10px">Reset</button>
+
+    <!-- Export Dropdown -->
+    <div class="dropdown  btn-outline-primary mr-1">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Export
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+            <!-- Static 'All' option -->
+            <li>
+                <a class="dropdown-item"
+                   href="#"
+                   data-export-name="All"
+                   th:data-api-list="${allApis}"
+                   onclick="exportData(this.getAttribute('data-export-name'), this.getAttribute('data-api-list'))">
+                All</a>
+            </li>
+
+            <!-- Dynamic options from exportOptions -->
+            <li th:each="exportOption : ${exportOptions}">
+                <a class="dropdown-item" href="#"
+                   th:text="${exportOption.name}"
+                   th:data-export-name="${exportOption.name}"
+                   th:data-api-list="${exportOption.apiIds}"
+                   onclick="exportData(this.getAttribute('data-export-name'), this.getAttribute('data-api-list'))">
+                </a>
+            </li>
+        </ul>
+    </div>
+
 </div>
-<div class="button-container"
-     style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
-    <button class="btn btn-primary" onclick="save(getActiveEditorId())" style="margin-right: 10px;" type="button" disabled>Save</button>
-    <button class="btn btn-secondary" onclick="exportData()" style="margin-right: 10px;" type="button">Export</button>
-    <button class="btn btn-danger" onclick="reset()" type="button">Reset</button>
-</div>
+
 
 <!-- External script imports -->
 <script src="/js/main.js"></script>

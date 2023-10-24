@@ -33,3 +33,9 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/product.yaml
+/src/main/resources/productFamily.yaml
+/src/main/resources/tenant.yaml
+/src/main/resources/api.json
+/src/main/resources/output/
+bundle.zip

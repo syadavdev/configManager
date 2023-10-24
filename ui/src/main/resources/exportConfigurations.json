@@ -1,0 +1,26 @@
+[ {
+  "name" : "T-Config",
+  "apiList" : [ {
+    "id" : "tenant",
+    "label" : "Tenant",
+    "language" : "yaml"
+  } ]
+}, {
+  "name" : "P-Config",
+  "apiList" : [ {
+    "id" : "productfamily",
+    "label" : "Product Family",
+    "language" : "yaml"
+  }, {
+    "id" : "product",
+    "label" : "Product",
+    "language" : "yaml"
+  } ]
+}, {
+  "name" : "A-Config",
+  "apiList" : [ {
+    "id" : "api",
+    "label" : "API",
+    "language" : "json"
+  } ]
+} ]

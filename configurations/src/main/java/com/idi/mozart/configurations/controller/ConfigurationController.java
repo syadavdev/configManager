@@ -13,9 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.Random;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.Collections;
+import java.util.Map;
 
 import org.springframework.http.*;
 import org.slf4j.Logger;
@@ -116,12 +115,11 @@ public class ConfigurationController {
 	}
 
 	@PostMapping(value = "api/import")
-	public ResponseEntity<String> importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
+	public ResponseEntity<Map<String, String>> importConfigs(@RequestParam("file") MultipartFile zipFile) throws IOException {
 		if (zipFile.isEmpty()) {
 			logger.info("zip file is empty");
-			return ResponseEntity.badRequest().body("empty zip file");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("status", "empty zip file"));
 		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(importService.importConfigs(zipFile));
+		return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("status", importService.importConfigs(zipFile)));
 	}
 }

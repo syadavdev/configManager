@@ -4,3 +4,4 @@ function showToast(message) {
     const toast = new bootstrap.Toast(toastElement);
     toast.show();
 }
+
