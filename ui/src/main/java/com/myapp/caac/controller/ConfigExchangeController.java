@@ -35,9 +35,13 @@ public class ConfigExchangeController {
     }
 
     @GetMapping("/export")
-    public String export(Model model) {
+    public String export(Model model) throws Exception {
         model.addAttribute("currentPage", "export");
         model.addAttribute("apiList", getCustomApis());
+        String allApis = getCustomApis().stream().map(CustomApi::getId).collect(Collectors.joining(","));;
+        model.addAttribute("allApis", allApis);
+        List<ExportConfigurations> exportOptions = configurationService.loadExportConfigurations();
+        model.addAttribute("exportOptions",exportOptions);
         return "export";
     }
 

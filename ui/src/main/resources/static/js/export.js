@@ -2,20 +2,29 @@ let editors = {};  // Object to hold references to all the Monaco editor instanc
 let unsavedChanges = {};  // Object to track unsaved changes
 
 
-function exportData() {
-    console.log('Export button clicked');
-
-    // Iterate through the unsavedChanges object to find which tabs have unsaved changes
-    for (const editorId in unsavedChanges) {
-        if (unsavedChanges.hasOwnProperty(editorId) && unsavedChanges[editorId]) {
-            // Call the save function for each tab with unsaved changes
-            console.log(`Saving ${editorId}...`)
+function exportData(exportName, apiListJson) {
+    console.log('Export button clicked for ' + exportName);
+    showToast('Export button clicked for ' + exportName);
+    // Split apiListJson by comma
+    let apiList = apiListJson.split(',');
+    console.log('apiList:', apiList);
+    console.log("unsavedChanges:", unsavedChanges);
+    // Iterate through the apiList and save if there are unsaved changes
+    for (const api of apiList) {
+        editorId = 'editor-' + api;
+        if (unsavedChanges[editorId]) {
+            console.log(`Saving ${editorId}...`);
+            showToast(`Saving ${editorId}...`);
             save(editorId);
         }
     }
+    showToast('Export Started:' + exportName + apiList.join(','));
+    // Wait for the save operations to complete before proceeding with the export
+    // Modify the fetch URL to include IDs as query parameters
+    const apiUrl = 'http://localhost:18080/convert-to-bundle?ids=' + apiList.join(',');
 
     // Now proceed with your export logic
-    fetch('http://localhost:18080/convert-to-bundle', {
+    fetch(apiUrl, {
         method: 'GET',
         headers: {
             'Accept': 'application/zip',
@@ -34,7 +43,7 @@ function exportData() {
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'bundle.zip';  // Set the desired file name here
+            a.download = exportName + "-bundle.zip";
 
             document.body.appendChild(a);
             a.click();

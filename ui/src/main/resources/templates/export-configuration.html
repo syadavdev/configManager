@@ -8,10 +8,12 @@
 <div th:replace="~{fragments/toast :: toast}"></div>
 
 <div class="container mt-4">
-    <div>
+    <div class="d-flex align-items-center justify-content-between">
         <h1>Export Configuration</h1>
         <button class="btn btn-success" id="add-config-button" type="button">Add New Configuration</button>
     </div>
+
+
     <table class="table table-bordered" id="config-table">
         <thead>
         <tr>
@@ -25,7 +27,9 @@
             th:id="${'row-' + exportConfig.name}">
             <td>
                 <!-- Hidden input to send the configuration name -->
-                <input th:id="${'hidden-' + exportConfig.name}" th:name="name" th:value="${exportConfig.name}"
+                <input th:id="${'hidden-' + exportConfig.name}"
+                       th:name="name"
+                       th:value="${exportConfig.name}"
                        type="hidden"/>
                 <span th:text="${exportConfig.name}"></span> <!-- Display the name -->
             </td>

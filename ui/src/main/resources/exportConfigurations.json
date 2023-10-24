@@ -1,10 +1,13 @@
 [ {
-  "name" : "pConfiguration",
+  "name" : "T-Config",
   "apiList" : [ {
     "id" : "tenant",
     "label" : "Tenant",
     "language" : "yaml"
-  }, {
+  } ]
+}, {
+  "name" : "P-Config",
+  "apiList" : [ {
     "id" : "productfamily",
     "label" : "Product Family",
     "language" : "yaml"
@@ -14,20 +17,8 @@
     "language" : "yaml"
   } ]
 }, {
-  "name" : "gConfiguration",
+  "name" : "A-Config",
   "apiList" : [ {
-    "id" : "tenant",
-    "label" : "Tenant",
-    "language" : "yaml"
-  }, {
-    "id" : "product",
-    "label" : "Product",
-    "language" : "yaml"
-  }, {
-    "id" : "productfamily",
-    "label" : "Product Family",
-    "language" : "yaml"
-  }, {
     "id" : "api",
     "label" : "API",
     "language" : "json"
