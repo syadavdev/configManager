@@ -14,12 +14,6 @@ import java.util.Properties;
 public class ConfigDataExchangeApplication {
 
 
-    private final ResourceLoader resourceLoader;
-
-    public ConfigDataExchangeApplication(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(ConfigDataExchangeApplication.class, args);
     }
