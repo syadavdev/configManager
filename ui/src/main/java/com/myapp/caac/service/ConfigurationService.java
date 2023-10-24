@@ -1,13 +1,13 @@
 package com.myapp.caac.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.myapp.caac.entity.ExportConfigurations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,23 +34,32 @@ public class ConfigurationService {
 
         // Parse the JSON content into a list of ExportConfigurations objects
 
-        return objectMapper.readValue(jsonContent, new TypeReference<List<ExportConfigurations>>() {});
-        }
+        List<ExportConfigurations> exportConfigurations = objectMapper.readValue(jsonContent, new TypeReference<List<ExportConfigurations>>() {
+        });
+        log.info("exportConfigurations:{}", exportConfigurations);
+        return exportConfigurations;
+    }
 
 
     public void updateAndSaveExportConfigurations(List<ExportConfigurations> exportConfigurationsList) throws Exception {
         // Build the path to the resource
         Path resourceDirectory = Paths.get("src", "main", "resources");
         Path filePath = resourceDirectory.resolve("exportConfigurations.json");
-
+        log.info("File:{},{}", filePath, Files.exists(filePath));
+        Files.delete(filePath);
+        log.info("File:{},{}", filePath, Files.exists(filePath));
         // Create an ObjectMapper instance
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Serialize the list into a JSON string
-        String jsonContent = objectMapper.writeValueAsString(exportConfigurationsList);
+        // Enable pretty printing
+        ObjectWriter writer = objectMapper.writerWithDefaultPrettyPrinter();
+
+        // Serialize the list into a JSON string with pretty printing
+        String jsonContent = writer.writeValueAsString(exportConfigurationsList);
 
         // Write the JSON string to the file
-        log.info("File Content to: {}",jsonContent);
+        log.info("Saving file to: {}", filePath.toAbsolutePath());
+        log.info("File Content to: {}", jsonContent);
         Files.writeString(filePath, jsonContent);
     }
 }

@@ -1,5 +1,6 @@
 let apiList = [];
 let newRowCounter = 1;
+
 function handleCheckboxChange(event) {
     console.log('Checkbox change event triggered');
     let row = event.target.closest('.config-row');
@@ -98,22 +99,11 @@ async function addNewConfigRow() {
     newRowCounter++;
 }
 
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     document.getElementById('add-config-button').addEventListener('click', addNewConfigRow);
-// });
-//
-// window.onload = (event) => {
-//     console.log('DOM fully loaded and parsed');
-//     document.querySelectorAll('.api-checkbox').forEach(checkbox => {
-//         console.log('Storing original state for checkbox');
-//         checkbox.dataset.originalState = checkbox.checked;
-//         checkbox.addEventListener('change', handleCheckboxChange);
-//     });
-//     // document.getElementById('add-config-button').addEventListener('click', addNewConfigRow);
-// };
 
 document.addEventListener('DOMContentLoaded', async (event) => {
+    console.log('DOM fully loaded and parsed');
     await fetchApiList();  // Fetch apiList on page load
+    console.log('apiList:', apiList);
     document.getElementById('add-config-button').addEventListener('click', addNewConfigRow);
     document.querySelectorAll('.api-checkbox').forEach(checkbox => {
         console.log('Storing original state for checkbox');
@@ -125,7 +115,8 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 async function handleSaveButtonClick(configName) {
 
     // Adjust the rowId determination to handle both existing and new configurations
-    let rowId = configName.startsWith('new-row-') ? configName : 'row-' + configName;
+    let isNewRow = configName.startsWith('new-row-')
+    let rowId = isNewRow ? configName : 'row-' + configName;
     console.log('Save button clicked for configName:', configName, 'rowId:', rowId)
     let row = document.getElementById(rowId);
     console.log(row)
@@ -138,7 +129,6 @@ async function handleSaveButtonClick(configName) {
     let name = nameInput ? nameInput.value : document.getElementById('hidden-' + configName).value;
 
 
-
     let checkboxes = row.querySelectorAll('.api-checkbox');
     let apiList = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
 
@@ -148,6 +138,7 @@ async function handleSaveButtonClick(configName) {
         apiList: apiList
     };
 
+    console.log('Saving configuration:', data);
 
     try {
         const response = await fetch('/configuration', {
@@ -165,7 +156,7 @@ async function handleSaveButtonClick(configName) {
         }
 
         const responseData = await response.json();
-        showToast(name + ":"+ responseData.message);  // Assuming the JSON object has a 'message' property
+        showToast(name + ":" + responseData.message);  // Assuming the JSON object has a 'message' property
         // Disable the save button
         let saveButton = row.querySelector('.save-button');
         saveButton.disabled = true;
@@ -173,6 +164,9 @@ async function handleSaveButtonClick(configName) {
         // Add a 'saved' class to the row
         row.classList.add('saved');
         console.log(row)
+        if(isNewRow){
+            updateRow(rowId);
+        }
 
 
     } catch (error) {
@@ -181,6 +175,32 @@ async function handleSaveButtonClick(configName) {
     }
 }
 
+function updateRow(rowId) {
+    // Find the row to update
+    let row = document.getElementById(rowId);
+    console.log(row)
+    if (!row) {
+        console.error('Row not found:', rowId);
+        return;
+    }
+
+    // Retrieve the new ID from the input field
+    let newIdInput = row.querySelector('input[type="text"]');
+    let newId = newIdInput ? newIdInput.value : null;
+    if (!newId) {
+        console.error('New ID not provided');
+        return;
+    }
+
+    // Update the ID-related attributes
+    row.id = 'row-' + newId;
+    console.log(newIdInput);
+    newIdInput.type = 'hidden';
+
+    let span = document.createElement('span');
+    span.textContent = newIdInput.value;
+    newIdInput.parentNode.appendChild(span);
+}
 
 
 

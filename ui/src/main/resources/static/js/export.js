@@ -23,7 +23,7 @@ function exportData() {
     })
         .then(response => {
             if (!response.ok) {
-                const errorText = 'Error in exporting Configurations ' + response.json()  ;
+                const errorText = 'Error in exporting Configurations ' + response.json();
                 showToast(errorText);  // Display the error message using a toast
                 throw new Error('Network response was not ok ' + response.statusText);
             }
@@ -94,7 +94,7 @@ function createEditor(editorElement, language, content, editorId) {
     const editor = monaco.editor.create(editorElement, {
         value: content,
         language: language.toLowerCase(),
-        scrollbar: { vertical: 'auto', horizontal: 'auto' },
+        scrollbar: {vertical: 'auto', horizontal: 'auto'},
         theme: 'vs-dark',
         automaticLayout: true,
     });
@@ -111,7 +111,9 @@ function refreshEditors(e) {
     const targetId = e.target.getAttribute('href').substring(1);
     const editorId = 'editor-' + targetId;
     if (editors[editorId]) {
-        setTimeout(() => { editors[editorId].layout(); }, 300);
+        setTimeout(() => {
+            editors[editorId].layout();
+        }, 300);
         setTimeout(updateSaveButtonState, 300);
     }
 }

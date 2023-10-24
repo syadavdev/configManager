@@ -11,25 +11,24 @@
 
 <div class="d-flex align-items-center" style="height: 100vh;">
     <div class="container">
-        <label for="fileInput" class="form-label">Upload Configuration Bundle</label>
+        <label class="form-label" for="fileInput">Upload Configuration Bundle</label>
 
         <div class="row mb-3">
             <div class="col-md-9">
                 <!-- Updated file input field -->
                 <div class="input-group">
                     <div class="custom-file" style="width: 100%;">
-                        <input type="file" class="form-control" id="fileInput" accept=".zip" name="api" required>
+                        <input accept=".zip" class="form-control" id="fileInput" name="api" required type="file">
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <!-- Upload button -->
-                <button id="uploadButton" class="btn btn-primary w-100">Upload</button>
+                <button class="btn btn-primary w-100" id="uploadButton">Upload</button>
             </div>
         </div>
     </div>
 </div>
-
 
 
 <script src="/js/toast.js"></script>
