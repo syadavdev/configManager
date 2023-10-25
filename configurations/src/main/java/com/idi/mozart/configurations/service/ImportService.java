@@ -6,6 +6,7 @@ import com.idi.mozart.configurations.model.ApplicationMetaData;
 import com.idi.mozart.configurations.model.RootMetadata;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +28,11 @@ import java.util.zip.ZipInputStream;
 @Slf4j
 public class ImportService {
 
+    @Autowired
+    private ObjectMapper objectMapper;
+    private final String ROOT_METADATA = "root_metadata.json";
     public String importConfigs(MultipartFile zipFile) throws IOException {
-
+        Boolean flag = true;
         Path resourceDirectory = Paths.get("src", "main", "resources", "config");
         log.info("Extracting file to: {}", resourceDirectory.toAbsolutePath());
         File targetDir = new File(resourceDirectory.toAbsolutePath().toString());
@@ -36,45 +40,57 @@ public class ImportService {
         //Reading zip and extracting to target directory
         if(extractingZipFile(zipFile, targetDir)){
 
-            //Reading root metadata file
-            RootMetadata rootMetadata = readRootMetaData(targetDir);
+            log.info("Processing Root Metadata file");
+            Path filePath = Paths.get(targetDir.getAbsolutePath(), ROOT_METADATA);
+            RootMetadata rootMetadata = objectMapper.readValue(
+                    new File(filePath.toAbsolutePath().toString()), RootMetadata.class);
+
             int noOfApplication = Integer.parseInt(rootMetadata.getNoofapplications());
             final List<Application> applications = rootMetadata.getApplications();
             int sequence = 1;
-            while(sequence <= noOfApplication){
+            while(sequence <= noOfApplication) {
                 int finalSequence = sequence;
-                Optional<Application> applicationOptional = applications.stream().filter(e -> Objects.equals(e.getExecutionSeq(), finalSequence)).findFirst();
+                Optional<Application> applicationOptional = applications.stream()
+                        .filter(e -> Objects.equals(e.getExecutionSeq(), finalSequence)).findFirst();
 
-                if(applicationOptional.isPresent()) {
+                if (applicationOptional.isPresent()) {
                     Application application = applicationOptional.get();
+
                     //Reading Application metadata file
                     final String applicationMetadataName = application.getApplicationMetadataName();
-                    Path filePath = Paths.get(targetDir.getAbsolutePath(), applicationMetadataName);
-                    File appMetaDataFile = new File(filePath.toAbsolutePath().toString());
-                    ApplicationMetaData applicationMetaData = readAppMetaData(appMetaDataFile);
+                    filePath = Paths.get(targetDir.getAbsolutePath(), applicationMetadataName);
+                    ApplicationMetaData applicationMetaData = objectMapper.readValue(
+                            new File(filePath.toAbsolutePath().toString()), ApplicationMetaData.class);
+                    ;
 
-                    //processing application metadata file
-                    assert applicationMetaData != null;
-                    processApplicationMetaData(applicationMetaData, targetDir);
+                    log.info("Processing application metadata file {}", filePath);
+                    if (Objects.nonNull(applicationMetaData))
+                        processApplicationMetaData(applicationMetaData, targetDir);
+                    else
+                        flag = false;
+                }else{
+                    flag = false;
                 }
                 sequence++;
             }
-
+        }else {
+            flag = false;
         }
 
         // Clean up: delete the temporary directory
         FileUtils.deleteDirectory(targetDir);
-        return "imported successfully";
+        return flag ? "Imported successfully" : "Import unsuccessfully";
     }
 
-    private void processApplicationMetaData(ApplicationMetaData applicationMetaData, File targetDir){
+    private Boolean processApplicationMetaData(ApplicationMetaData applicationMetaData, File targetDir){
         //TODO: Write more logic here depending on metadata file
         if ("FileUpload".equals(applicationMetaData.getConfigurationOperation())) {
-            uploadFile(applicationMetaData, targetDir);
+            return uploadFile(applicationMetaData, targetDir);
         }
+        return true;
     }
 
-    private void uploadFile(ApplicationMetaData applicationMetaData, File targetDir) {
+    private Boolean uploadFile(ApplicationMetaData applicationMetaData, File targetDir) {
         Path destinationPath = Path.of(applicationMetaData.getConfigurationApplyPath(), applicationMetaData.getConfigurationFileName());
         File destinationFile = destinationPath.toFile();
         if (!destinationFile.getParentFile().exists()) {
@@ -88,30 +104,10 @@ public class ImportService {
             Files.move(sourceFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
             log.info("File copied successfully to : " + destinationPath.toAbsolutePath());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error while copying File", e);
+            return false;
         }
-
-    }
-
-    private ApplicationMetaData readAppMetaData(File targetDir){
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(new File(targetDir.getAbsolutePath()), ApplicationMetaData.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private RootMetadata readRootMetaData(File targetDir){
-        try {
-            Path filePath = Paths.get(targetDir.getAbsolutePath(), "root_metadata.json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(new File(filePath.toAbsolutePath().toString()), RootMetadata.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return true;
     }
 
     private Boolean extractingZipFile(MultipartFile zipFile, File tempDirectory) {
@@ -129,16 +125,11 @@ public class ImportService {
 
                 // Write the entry data to the entry file
                 try (OutputStream outputStream = new FileOutputStream(entryFile)) {
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = zipInputStream.read(buffer)) > 0) {
-                        outputStream.write(buffer, 0, len);
-                    }
+                    outputStream.write(zipInputStream.readAllBytes());
                 }
             }
         }catch (IOException e){
-            log.info("Error while processing zip File");
-            e.printStackTrace();
+            log.error("Error while processing zip File", e);
             return false;
         }
         return true;
