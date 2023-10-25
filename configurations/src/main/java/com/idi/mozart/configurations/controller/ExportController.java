@@ -62,7 +62,7 @@ public class ExportController {
 
         for (Map.Entry<String,String> file : filesToZip.entrySet()){
             ApplicationMetaData metadata = exportService.setRootMetadata();
-            metadata.setConfigurationFileName(file.getValue());
+            metadata.setConfigurationFileName(file.getKey());
             objectMapper.writeValue(new File(file.getValue()) , metadata);
         }
 

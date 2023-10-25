@@ -44,7 +44,7 @@ public class ExportService {
         metadata.setConfigurationFilepath("src/main/resources/");
         metadata.setDescription("test desc");
         metadata.setConfigurationType("json");
-        metadata.setConfigurationApplyPath("src/main/resources/output/");
+        metadata.setConfigurationApplyPath("src/main/resources/");
         metadata.setConfigurationOperation("FileUpload");
         return metadata;
     }
