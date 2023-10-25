@@ -1,83 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header.html :: header}">
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Configuration Management Tool</title>
 </head>
 <body>
 <!-- Navbar goes here -->
 <div th:replace="~{fragments/navbar.html :: navbar-content}"></div>
 
-<div class="p-1 bg-body-tertiary">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Configuration Management Tool</h1>
-        <p class="col-md-12 fs-5">Overview
-            Our Configuration Management Tool (CMT) is designed to streamline the setup and management of software
-            applications across various environments. It ensures consistency and correctness of configuration, which is
-            critical for the accurate and efficient operation of software systems.</p>
-        <a href="/import">
-            <h2>Import</h2>
-        </a>
-        <p>With the Import , users can easily introduce new configuration settings or update existing ones from external
-            sources:</p>
-        <ul>
-            <li>
-                <strong>Bulk Import:</strong> Streamline the setup process by importing configuration settings in bulk
-                from a file. Supported file formats include JSON, XML, and CSV.
-            </li>
-        </ul>
+<div class="container mt-4">
+    <h1 class="display-4 fw-bold">Configuration Management Tool</h1>
+    <p class="custom-font-size">For developers knee-deep in code and tasked with ensuring seamless software deployments, our Configuration Management Tool (CMT) is a game-changer. We understand how crucial accurate configurations are to your workflow and the overall health of a software system. That's why our CMT has been meticulously crafted to guarantee consistency and precision.</p>
+    <p class="custom-font-size">Imagine a coding environment where configuration hiccups are a distant memory. With our robust Import and Export features, the CMT ensures that you’re always in sync, minimizing setbacks and avoiding those pesky deployment bugs. Think of our CMT not just as another tool, but as your coding companion, simplifying tasks and ensuring harmony across varied software landscapes.</p>
 
-        <a href="/export">
-            <h2>Export</h2>
-        </a>
-        <p>The Export enables users to extract current configuration settings for backup or for use in other
-            environments:</p>
-        <ul>
-            <li>
-                <strong>Selective Export:</strong> Choose specific configurations to export based on categories or
-                individual settings.
-            </li>
-            <li>
-                <strong>Versioning:</strong> Keep track of configuration changes over time with automatic versioning of
-                exported configuration files.
-            </li>
-        </ul>
-        <div>
-            <a href="/export-configuration">
-                <h2>Export Template Configuration</h2>
-            </a>
-            <p>Preconfigure different products in the Configuration Management Tool for quicker and more efficient exports.
-            </p>
-            <ul>
-                <li>
-                    <strong>Add Export Template:</strong>
-                </li>
-                <li>
-                    <strong>Update Export template:</strong>
-                </li>
-            </ul>
+    <h2><a href="/import">Import</a></h2>
+    <p>With the Import, users can easily introduce new configuration settings or update existing ones from external sources:</p>
+    <ul>
+        <li><strong>Bulk Import:</strong> Streamline the setup process by importing configuration settings in bulk from a file. Supported file formats include JSON, XML, and CSV.</li>
+    </ul>
 
-        </div>
+    <h2><a href="/export">Export</a></h2>
+    <p>The Export enables users to extract current configuration settings for backup or for use in other environments:</p>
+    <ul>
+        <li><strong>Selective Export:</strong> Choose specific configurations to export based on categories or individual settings.</li>
+        <li><strong>Versioning:</strong> Keep track of configuration changes over time with automatic versioning of exported configuration files.</li>
+    </ul>
 
-        <h2>Help Needed</h2>
-        <ul>
-            <li>
-                <strong>Audit Trail:</strong> Maintain a complete history of configuration changes to ensure
-                traceability and compliance.
-            </li>
-            <li>
-                <strong>Role-based Access Control:</strong> Define user roles and permissions to ensure that only
-                authorized individuals can make configuration changes.
-            </li>
-        </ul>
+    <h2><a href="/export-configuration">Custom Export Setup</a></h2>
+    <p>Preconfigure different products in the Configuration Management Tool for quicker and more efficient exports.</p>
+    <ul>
+        <li><strong>Add Export Template:</strong></li>
+        <li><strong>Update Export template:</strong></li>
+    </ul>
 
-        <p>Through the robust Import and Export functionalities, our Configuration Management Tool simplifies the
-            process of managing configurations, reducing the risk of errors, and ensuring a seamless operation across
-            different software environments.</p>
-
-    </div>
+    <h2>Future Improvement</h2>
+    <ul>
+        <li><strong>Audit Trail:</strong> Maintain a complete history of configuration changes to ensure traceability and compliance.</li>
+        <li><strong>Role-based Access Control:</strong> Define user roles and permissions to ensure that only authorized individuals can make configuration changes.</li>
+    </ul>
 </div>
+
 <div th:fragment="content"></div> <!-- Placeholder for the content -->
 
 </body>

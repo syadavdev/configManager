@@ -25,22 +25,21 @@
         </li>
     </ul>
 
-    <!-- Tab contents -->
     <div class="tab-content" id="fileTabsContent" th:each="api : ${apiList}">
         <div class="tab-pane fade"
              role="tabpanel"
              th:attr="id=${api.id},aria-labelledby='tab-' + ${api.id}"
              th:classappend="${apiStat.first} ? 'show active' : ''">
             <div class="editor-container rounded mt-1"
-                 style="height: calc(100vh - 200px); margin: 10px 20px"
+                 style="margin: 0 5px"
                  th:data-language="${api.language}"
                  th:id="'editor-' + ${api.id}">
             </div>
         </div>
     </div>
-</div>
-<div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;"
->
+
+    <div class="button-container" style="position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: center;">
+
     <button class="btn btn-primary" disabled onclick="save(getActiveEditorId())" style="margin-right: 10px;"
             type="button">Save
     </button>
@@ -48,7 +47,7 @@
 
     <!-- Export Dropdown -->
     <div class="dropdown  btn-outline-primary mr-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-export dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Export
         </button>
         <ul class="dropdown-menu" aria-labelledby="exportDropdown">

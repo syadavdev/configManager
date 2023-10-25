@@ -23,4 +23,23 @@
     "label" : "API",
     "language" : "json"
   } ]
+}, {
+  "name" : "MyConfig",
+  "apiList" : [ {
+    "id" : "tenant",
+    "label" : "Tenant",
+    "language" : "yaml"
+  }, {
+    "id" : "productfamily",
+    "label" : "Product Family",
+    "language" : "yaml"
+  }, {
+    "id" : "product",
+    "label" : "Product",
+    "language" : "yaml"
+  }, {
+    "id" : "api",
+    "label" : "API",
+    "language" : "json"
+  } ]
 } ]
