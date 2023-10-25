@@ -41,16 +41,17 @@ public class ExportController {
     private ExportService exportService;
 
     @GetMapping("/convert-to-bundle")
-    public ResponseEntity<FileSystemResource> convertPropertiesToJson() throws IOException{
+    public ResponseEntity<FileSystemResource> convertPropertiesToJson(@RequestParam("ids") String[] ids) throws IOException{
 
-//        String[] filesToZip = {"api.json", "product.yaml", "productFamily.yaml" , "tenant.yaml"}; // List of file names to zip
+        Map<String, String> filesToZip  = new HashMap<>();
 
-        Map<String, String> filesToZip  = new HashMap<String, String>() {{
-            put("api.json", "api_metadata.json");
-            put("product.yaml", "product_metadata.json");
-            put("productFamily.yaml" , "productFamily_metadata.json");
-            put("tenant.yaml" , "tenant_metadata.json");
-        }};
+        for(String id:ids){
+            if(id.equals("api")){
+                filesToZip.put("api.json" , "api_metadata.json");
+            } else{
+                filesToZip.put(id+".yaml" , id+"_metadata.json");
+            }
+        }
 
         String zipFileName = "bundle.zip"; // Name of the output ZIP file
 
