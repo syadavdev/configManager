@@ -30,10 +30,10 @@ public class ZipFileCreator {
                 Path resourceDirectory = Paths.get("src", "main", "resources");
                 Path filePath = resourceDirectory.resolve(fileName.getKey());
                 File file = filePath.toFile();
-//                File file = new File(filePath);
                 File metadataFile = new File(fileName.getValue());
+
                 if (!file.exists() || !metadataFile.exists()) {
-                    log.info("File not found: " + fileName.getKey());
+                    log.error("File not found: " + fileName.getKey());
                     continue; // Skip non-existent files
                 }
 
@@ -65,16 +65,22 @@ public class ZipFileCreator {
             // Close streams
             zos.close();
 
+            if(newFile.exists()){
+                log.info("root_metadata.json is created");
+            } else log.info("failed to create root_metadata.json");
+
             // Replace the existing ZIP file with the updated one
             File existingZip = new File("bundle.zip");
             File updatedZip = new File("bundle.zip");
             if (updatedZip.renameTo(existingZip)) {
-                System.out.println("File added to the existing ZIP file successfully.");
+                log.info("File added to the existing ZIP file successfully.");
             } else {
-                System.out.println("Failed to replace the existing ZIP file.");
+                log.error("Failed to replace the existing ZIP file.");
             }
-
-            System.out.println("ZIP file created successfully: " + zipFileName);
+            if(updatedZip.exists()){
+                log.info("ZIP file created successfully: " + zipFileName);
+            }else
+                log.error("Error creating Zip file :"+ zipFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
