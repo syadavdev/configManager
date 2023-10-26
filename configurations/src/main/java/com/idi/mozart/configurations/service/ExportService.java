@@ -40,7 +40,6 @@ public class ExportService {
     public ApplicationMetaData setRootMetadata() {
 
         ApplicationMetaData metadata = new ApplicationMetaData();
-//        metadata.setConfigurationFileName(file.getValue());
         metadata.setConfigurationFilepath("src/main/resources/");
         metadata.setDescription("test desc");
         metadata.setConfigurationType("json");

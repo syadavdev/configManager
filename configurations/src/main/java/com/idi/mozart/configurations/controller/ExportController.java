@@ -1,12 +1,10 @@
 package com.idi.mozart.configurations.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.idi.mozart.configurations.model.Application;
 import com.idi.mozart.configurations.model.ApplicationMetaData;
 import com.idi.mozart.configurations.model.RootMetadata;
 import com.idi.mozart.configurations.service.ExportService;
 import com.idi.mozart.configurations.util.ZipFileCreator;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -14,28 +12,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @CrossOrigin
 @RestController
 @Slf4j
 public class ExportController {
-
-
-
 
     @Autowired
     private ExportService exportService;
