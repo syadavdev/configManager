@@ -4,6 +4,10 @@
     "id" : "tenant",
     "label" : "Tenant",
     "language" : "yaml"
+  }, {
+    "id" : "api",
+    "label" : "API",
+    "language" : "json"
   } ]
 }, {
   "name" : "P-Config",

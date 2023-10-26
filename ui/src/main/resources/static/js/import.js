@@ -9,7 +9,7 @@ function handleFileUpload() {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch('http://localhost:19090/api/import', {
+        fetch('/api/import', {
             method: 'POST',
             body: formData,
         })

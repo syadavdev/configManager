@@ -23,7 +23,7 @@ function handleCheckboxChange(event) {
 
 async function fetchApiList() {
     try {
-        const response = await fetch('/apis');
+        const response = await fetch('api/v1/apis');
         if (!response.ok) {
             console.error('Failed to fetch API list:', response.statusText);
             return;
@@ -141,7 +141,7 @@ async function handleSaveButtonClick(configName) {
     console.log('Saving configuration:', data);
 
     try {
-        const response = await fetch('/configuration', {
+        const response = await fetch('/api/v1/configexport', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {

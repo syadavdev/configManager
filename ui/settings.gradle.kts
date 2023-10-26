@@ -1,1 +1,1 @@
-rootProject.name = "ConfigDataExchange"
+rootProject.name = "Configuration Code Management"
