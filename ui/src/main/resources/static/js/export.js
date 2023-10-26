@@ -21,7 +21,7 @@ function exportData(exportName, apiListJson) {
     showToast('Export Started:' + exportName + apiList.join(','));
     // Wait for the save operations to complete before proceeding with the export
     // Modify the fetch URL to include IDs as query parameters
-    const apiUrl = 'http://localhost:18080/convert-to-bundle?ids=' + apiList.join(',');
+    const apiUrl = 'http://localhost:19090/convert-to-bundle?ids=' + apiList.join(',');
 
     // Now proceed with your export logic
     fetch(apiUrl, {
@@ -88,7 +88,7 @@ function setupEditors() {
         const editorContainer = pane.querySelector('.editor-container');
         const language = editorContainer.getAttribute('data-language');
 
-        fetch(`http://localhost:18080/api/${pane.id}/getconfiguration`)
+        fetch(`http://localhost:19090/api/${pane.id}/getconfiguration`)
             .then(response => response.text())
             .then(content => {
                 createEditor(editorElement, language, content, editorId);

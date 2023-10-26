@@ -12,7 +12,7 @@ function save(editorId) {
 
     formData.append('file', file);
 
-    fetch(`http://localhost:18080/api/${paneId}/saveconfiguration`, {
+    fetch(`http://localhost:19090/api/${paneId}/saveconfiguration`, {
         method: 'POST',
         body: formData
     })

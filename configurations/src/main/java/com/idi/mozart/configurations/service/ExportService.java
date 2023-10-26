@@ -31,6 +31,7 @@ public class ExportService {
             application.setApplicationName(file.getKey());
             application.setExecutionSeq(count);
             application.setApplicationMetadataName(file.getValue());
+            application.setApplicationMetadataPath("src/main/resources");
             applications.add(application);
         }
         rootMetadata.setApplications(applications);

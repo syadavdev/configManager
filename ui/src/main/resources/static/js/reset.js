@@ -4,7 +4,7 @@ function reset() {
     const editorId = 'editor-' + activePaneId;
     const activePaneName = document.querySelector(`#tab-${activePaneId}`).textContent;
 
-    fetch(`http://localhost:18080/api/${activePaneId}/getconfiguration`)
+    fetch(`http://localhost:19090/api/${activePaneId}/getconfiguration`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
