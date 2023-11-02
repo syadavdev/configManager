@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,13 @@ public class ExportService {
         }
     }
 
-        public RootMetadata setRootMetadata(Map<String, String> fileNames) {
+    /**
+     *
+     * @param fileNames - file names to be zipped
+     * @return returns the rootMetadata to be created from the files
+     */
+
+    public RootMetadata setRootMetadata(Map<String, String> fileNames) {
         RootMetadata rootMetadata = new RootMetadata();
         List<Application> applications = new ArrayList<>();
 
@@ -55,6 +62,10 @@ public class ExportService {
         return rootMetadata;
     }
 
+    /**
+     * sets the application metadata files
+     */
+
     public ApplicationMetaData setRootMetadata() {
         ApplicationMetaData metadata = new ApplicationMetaData();
         metadata.setConfigurationFilepath(resourceDirectory.toAbsolutePath().toString());
@@ -63,6 +74,25 @@ public class ExportService {
         metadata.setConfigurationApplyPath(resourceDirectory.toAbsolutePath().toString());
         metadata.setConfigurationOperation("FileUpload");
         return metadata;
+    }
+
+    /**
+     * @param ids - array of String containing the ids of configuration to be added
+     * @return Map with configuration file name and Metadata file name
+     */
+
+    public Map<String , String> setMap(String[] ids){
+        Map<String , String> filesToZip = new HashMap<>();
+
+        for(String id : ids){
+            if(id.equals("api")){
+                filesToZip.put(id+".json" , id+"_metadata.json");
+            } else{
+                filesToZip.put(id+".yaml" , id+"_metadata.json");
+            }
+        }
+
+        return filesToZip;
     }
 
 }

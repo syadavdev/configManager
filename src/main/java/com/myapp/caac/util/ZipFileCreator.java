@@ -37,6 +37,13 @@ public class ZipFileCreator {
         this.metadataDirectory = Paths.get("src", "main", "resources", metadataDirectory);
     }
 
+    /**
+     *
+     * @param fileNames - Map with file name and Metadata file name
+     * @param zipFileName - name of the zip file
+     * @return Path of the Zip file
+     */
+
     public Path createZipFile(Map<String, String> fileNames, String zipFileName) {
         List<String> addedFiles = new ArrayList<>();
         Path zipFile = apiProcessingDirectory.resolve(zipFileName);
@@ -60,6 +67,15 @@ public class ZipFileCreator {
         }
         return zipFile;
     }
+
+    /**
+     *
+     * @param baseDir - the base directory
+     * @param fileName - file name of the root Metadata  file
+     * @param zos - Zip output stream object
+     * @param addedFiles - List of Strings to be added in the zip
+     * @throws IOException
+     */
 
     private void addFileToZip(Path baseDir, String fileName, ZipOutputStream zos, List<String> addedFiles) throws IOException {
         Path filePath = baseDir.resolve(fileName);

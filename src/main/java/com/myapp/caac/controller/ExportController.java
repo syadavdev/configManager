@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myapp.caac.model.ApplicationMetaData;
 import com.myapp.caac.model.RootMetadata;
 import com.myapp.caac.service.ExportService;
+import com.myapp.caac.util.Constants;
 import com.myapp.caac.util.ZipFileCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin
@@ -33,25 +33,28 @@ public class ExportController {
     @Autowired
     private ZipFileCreator zipFileCreator;
 
-    @GetMapping("/convert-to-bundle")
+    /**
+     *
+     * @param ids - Array of string containing the name of the files to be zipped in bundle
+     * @return Creates the bundle from the respected configuration files and returns the same
+     * @throws IOException
+     */
+
+    @GetMapping("api/export")
     public ResponseEntity<FileSystemResource> convertPropertiesToJson(@RequestParam("ids") String[] ids) throws IOException {
 
-        Map<String, String> filesToZip = new HashMap<>();
+        //set the map with fileName and metadata fileName
+        Map<String, String> filesToZip = exportService.setMap(ids);
 
-        for (String id : ids) {
-            if (id.equals("api")) {
-                filesToZip.put("api.json", "api_metadata.json");
-            } else {
-                filesToZip.put(id + ".yaml", id + "_metadata.json");
-            }
-        }
+        //name of the zip file
+        String zipFileName = Constants.ZIP_FILE_NAME; // Name of the output ZIP file
 
-        String zipFileName = "bundle.zip"; // Name of the output ZIP file
-
+        //set the root metadata object from respective configuration files
         RootMetadata rootMetadata = exportService.setRootMetadata(filesToZip);
 
         // Create an ObjectMapper instance from Jackson
         ObjectMapper objectMapper = new ObjectMapper();
+
 
         for (Map.Entry<String, String> file : filesToZip.entrySet()) {
             ApplicationMetaData metadata = exportService.setRootMetadata();
@@ -61,13 +64,17 @@ public class ExportController {
 
         // Serialize the POJO to a JSON file
         objectMapper.writeValue(new File("root_metadata.json"), rootMetadata);
+
+        //create zip file (bundle)
         Path zipFile = zipFileCreator.createZipFile(filesToZip, zipFileName);
 
+        //added to the headers that the file is sent as an attachment
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=bundle.zip");
 
         long contentLength = Files.size(zipFile);
 
+        //returning the bundled zip with the configuration file and the metadata file
         return ResponseEntity
                 .ok()
                 .headers(headers)
